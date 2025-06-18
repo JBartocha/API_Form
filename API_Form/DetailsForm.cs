@@ -1,4 +1,5 @@
 ﻿using ApiStoreTest;
+using Microsoft.Web.WebView2.WinForms;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -168,22 +169,6 @@ namespace API_Form
             }
         }
 
-        private void ResizeDataGridViewToFitRows(DataGridView dgv)
-        {
-            int totalRowHeight = 0;
-            foreach (DataGridViewRow row in dgv.Rows)
-            {
-                totalRowHeight += row.Height;
-            }
-            // Add the height of the column headers
-            int headerHeight = dgv.ColumnHeadersVisible ? dgv.ColumnHeadersHeight : 0;
-
-            // Add a small margin if desired (e.g., for borders)
-            int margin = 2;
-
-            dgv.Height = totalRowHeight + headerHeight + margin;
-        }
-
         private void button_zpet_Click(object sender, EventArgs e)
         {
             this.Close();
@@ -201,17 +186,58 @@ namespace API_Form
 
         private void button_Show_On_Map_Click(object sender, EventArgs e)
         {
-            double latitude, longitude;
-            if (double.TryParse(textBox_latitude.Text, out latitude) && double.TryParse(textBox_longitude.Text, out longitude))
+            var result1 = MessageBox.Show(
+                "Zobrazit mapu ve Formuláři?",
+                "Ano",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Question
+            );
+
+            if (result1 == DialogResult.Yes)
             {
-                Debug.WriteLine("latitude:" + latitude + ", longitude:" + longitude);
-                string url = $"https://www.google.com/maps/search/?api=1&query={latitude},{longitude}";
-                System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(url) { UseShellExecute = true });
+                showMap();
             }
-            else
+
+            var result2 = MessageBox.Show(
+                "Zobrazit mapu v prohlížeči?",
+                "Ano",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Question
+            );
+
+            if (result2 == DialogResult.Yes)
             {
-                MessageBox.Show("Invalid latitude or longitude values.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                double latitude, longitude;
+                if (double.TryParse(textBox_latitude.Text, out latitude) && double.TryParse(textBox_longitude.Text, out longitude))
+                {
+                    Debug.WriteLine("latitude:" + latitude + ", longitude:" + longitude);
+                    string url = $"https://www.google.com/maps/search/?api=1&query={latitude},{longitude}";
+                    System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(url) { UseShellExecute = true });
+                }
+                else
+                {
+                    MessageBox.Show("Invalid latitude or longitude values.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
         }
-    }
+
+
+        private void showMap()
+        {
+            double latitude, longitude;
+            string popup = richTextBox_name.Text;
+
+            latitude = double.TryParse(textBox_latitude.Text, out latitude) ? latitude : 0.0;
+            longitude = double.TryParse(textBox_longitude.Text, out longitude) ? longitude : 0.0;
+
+            this.Hide();
+            using (Form MapForm = new MapForm(latitude,longitude,popup))
+            {
+                MapForm.ShowDialog();
+            }
+            this.Show();
+
+        }
+
+    }      
 }
