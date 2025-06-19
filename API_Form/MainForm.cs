@@ -74,6 +74,8 @@ namespace API_Form
 
         private void button_Erase_DB_and_load_API_data_to_DB_Click(object sender, EventArgs e)
         {
+            this.Hide(); //TODO - co s tímto?
+
             ZasilkovnaJsonModel _zasilkovnaRoots = new ZasilkovnaJsonModel();
             LoadAPIString(ApiUrl);
             _zasilkovnaRoots = GetZasilkovnaData();
@@ -89,6 +91,15 @@ namespace API_Form
                 SearchForm.ShowDialog();
             }
             this.Show();
+        }
+
+        private void button_sync_Data_Click(object sender, EventArgs e)
+        {
+            ZasilkovnaJsonModel _zasilkovnaRoots = new ZasilkovnaJsonModel();
+            LoadAPIString(ApiUrl);
+            _zasilkovnaRoots = GetZasilkovnaData();
+            SynchronizeDatabaseWithCurrentZasilkovnaData.DeleteAllRowsAndResetIdentities();
+            Database_FillWithAPI_Data.FillDatabaseWithZasilkovnaData(_zasilkovnaRoots);
         }
     }
 }

@@ -16,9 +16,12 @@ namespace API_Form
     public partial class DetailsForm : Form
     {
         private readonly PickupPoint _pickupPointOriginal;
+        private RegularHours regularHoursChanged = new();
+
         public DetailsForm()
         {
             InitializeComponent();
+            _pickupPointOriginal = new PickupPoint();
         }
 
         public DetailsForm(PickupPoint pickupPoint)
@@ -116,7 +119,7 @@ namespace API_Form
                 // Move controls below the richTextBox down
                 foreach (Control ctrl in this.Controls)
                 {
-                    if (ctrl.Top > richTextBox.Top && (leftSide ? 
+                    if (ctrl.Top > richTextBox.Top && (leftSide ?
                         ctrl.Left < (this.Width / 2) : ctrl.Left >= (this.Width / 2)))
                     {
                         ctrl.Top += heightDiff;
@@ -169,6 +172,8 @@ namespace API_Form
             }
         }
 
+
+
         private void button_zpet_Click(object sender, EventArgs e)
         {
             this.Close();
@@ -181,7 +186,86 @@ namespace API_Form
 
         private void button_Uloz_Zmeny_Click(object sender, EventArgs e)
         {
+            PickupPoint current = new PickupPoint();
 
+            current.Id = int.TryParse(textBox_PP_ID.Text, out int id) ? id : 0;
+            current.Name = richTextBox_name.Text.Trim();
+            current.NameStreet = richTextBox_nameStreet.Text.Trim();
+            current.Special = richTextBox_special.Text.Trim();
+            current.Place = textBox_place.Text.Trim();
+            current.Street = textBox_street.Text.Trim();
+            current.City = textBox_city.Text.Trim();
+            current.Zip = textBox_zip.Text.Trim();
+            current.Country = textBox_country.Text.Trim();
+            current.Currency = textBox_currency.Text.Trim();
+            current.Directions = richTextBox_directions.Text.Trim();
+            current.DirectionsCar = richTextBox_directionsCar.Text.Trim();
+            current.DirectionsPublic = richTextBox_directionsPublic.Text.Trim();
+            current.WheelchairAccessible = textBox_wheelchairAccesible.Text.Trim();
+            current.Latitude = double.TryParse(textBox_latitude.Text, out double latitude) ? latitude : 0.0;
+            current.Longitude = double.TryParse(textBox_longitude.Text, out double longitude) ? longitude : 0.0;
+            current.DressingRoom = checkBox_dressingroom.Checked;
+            current.ClaimAssistant = checkBox_claimAssistant.Checked;
+            current.PacketConsignment = checkBox_packetConsignment.Checked;
+            current.MaxWeight = int.TryParse(textBox_maxWeight.Text, out int maxWeight) ? maxWeight : 0;
+            current.LabelRouting = textBox_labelRouting.Text.Trim();
+            current.LabelName = richTextBox_labelName.Text.Trim();
+
+            // Update the LINQ query to ensure the list does not contain null values
+            var exceptionDays = dataGridView_openingHoursExceptions.Rows
+                .Cast<DataGridViewRow>()
+                .Where(row => !row.IsNewRow)
+                .Select(row =>
+                {
+                    var dateString = row.Cells[0].Value?.ToString();
+                    var hours = row.Cells[1].Value?.ToString() ?? string.Empty;
+
+                    // Parse the date (assuming format "dd/MM/yyyy")
+                    if (DateOnly.TryParseExact(dateString, "dd/MM/yyyy", null, System.Globalization.DateTimeStyles.None, out var date))
+                    {
+                        return new ExceptionDay
+                        {
+                            Date = date,
+                            Hours = hours
+                        };
+                    }
+                    return null;
+                })
+                .Where(x => x != null) // Filter out null values
+                .Cast<ExceptionDay>() // Cast to non-nullable type
+                .ToList();
+
+            var photos = dataGridView_photos.Rows
+                .Cast<DataGridViewRow>()
+                .Where(row => !row.IsNewRow)
+                .Select(row => new Photo
+                {
+                    Thumbnail = row.Cells[0].Value?.ToString() ?? string.Empty,
+                    Normal = row.Cells[1].Value?.ToString() ?? string.Empty
+                })
+                .ToList();
+            current.Photos = photos;
+
+            current.OpeningHours = new OpeningHours
+            {
+                CompactShort = richTextBox_compactShort.Text.Trim(),
+                CompactLong = richTextBox_compactLong.Text.Trim(),
+                TableLong = richTextBox_tableLong.Text.Trim(),
+                Regular = new RegularHours
+                {
+                    Monday = dataGridView_openingHours.Rows[0].Cells[1].Value?.ToString() ?? string.Empty,
+                    Tuesday = dataGridView_openingHours.Rows[1].Cells[1].Value?.ToString() ?? string.Empty,
+                    Wednesday = dataGridView_openingHours.Rows[2].Cells[1].Value?.ToString() ?? string.Empty,
+                    Thursday = dataGridView_openingHours.Rows[3].Cells[1].Value?.ToString() ?? string.Empty,
+                    Friday = dataGridView_openingHours.Rows[4].Cells[1].Value?.ToString() ?? string.Empty,
+                    Saturday = dataGridView_openingHours.Rows[5].Cells[1].Value?.ToString() ?? string.Empty,
+                    Sunday = dataGridView_openingHours.Rows[6].Cells[1].Value?.ToString() ?? string.Empty
+                },
+                Exceptions = new Exceptions
+                {
+                    Exception = exceptionDays
+                }
+            };
         }
 
         private void button_Show_On_Map_Click(object sender, EventArgs e)
@@ -195,7 +279,7 @@ namespace API_Form
 
             if (result1 == DialogResult.Yes)
             {
-                showMap();
+                showleafletjsMapForm();
             }
 
             var result2 = MessageBox.Show(
@@ -222,22 +306,21 @@ namespace API_Form
         }
 
 
-        private void showMap()
+        private void showleafletjsMapForm()
         {
             double latitude, longitude;
             string popup = richTextBox_name.Text;
 
+            //TODO - ne zrovna nejlepší řešení když je zeměpisná šířka a delka prázdná
             latitude = double.TryParse(textBox_latitude.Text, out latitude) ? latitude : 0.0;
             longitude = double.TryParse(textBox_longitude.Text, out longitude) ? longitude : 0.0;
 
             this.Hide();
-            using (Form MapForm = new MapForm(latitude,longitude,popup))
+            using (Form MapForm = new MapForm(latitude, longitude, popup))
             {
                 MapForm.ShowDialog();
             }
             this.Show();
-
         }
-
-    }      
+    }
 }

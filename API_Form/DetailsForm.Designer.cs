@@ -91,6 +91,9 @@
             dataGridView_photos = new DataGridView();
             dataGridViewTextBox_thumbnail = new DataGridViewTextBoxColumn();
             dataGridViewTextBox_normal = new DataGridViewTextBoxColumn();
+            label_openingHours = new Label();
+            label_openingHoursException = new Label();
+            label_photos = new Label();
             ((System.ComponentModel.ISupportInitialize)dataGridView_openingHoursExceptions).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dataGridView_openingHours).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dataGridView_photos).BeginInit();
@@ -120,6 +123,7 @@
             // 
             textBox_PP_ID.Location = new Point(56, 73);
             textBox_PP_ID.Name = "textBox_PP_ID";
+            textBox_PP_ID.ReadOnly = true;
             textBox_PP_ID.Size = new Size(609, 23);
             textBox_PP_ID.TabIndex = 2;
             // 
@@ -529,7 +533,7 @@
             // 
             dataGridView_openingHoursExceptions.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridView_openingHoursExceptions.Columns.AddRange(new DataGridViewColumn[] { date, hour });
-            dataGridView_openingHoursExceptions.Location = new Point(740, 184);
+            dataGridView_openingHoursExceptions.Location = new Point(740, 238);
             dataGridView_openingHoursExceptions.Name = "dataGridView_openingHoursExceptions";
             dataGridView_openingHoursExceptions.ScrollBars = ScrollBars.Vertical;
             dataGridView_openingHoursExceptions.Size = new Size(653, 105);
@@ -552,7 +556,7 @@
             dataGridView_openingHours.AllowUserToAddRows = false;
             dataGridView_openingHours.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridView_openingHours.Columns.AddRange(new DataGridViewColumn[] { dataGridViewTextBox_day, dataGridViewTextBox_OpeningHoursDay });
-            dataGridView_openingHours.Location = new Point(740, 73);
+            dataGridView_openingHours.Location = new Point(740, 102);
             dataGridView_openingHours.Name = "dataGridView_openingHours";
             dataGridView_openingHours.ScrollBars = ScrollBars.Vertical;
             dataGridView_openingHours.Size = new Size(653, 105);
@@ -632,7 +636,7 @@
             // 
             dataGridView_photos.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridView_photos.Columns.AddRange(new DataGridViewColumn[] { dataGridViewTextBox_thumbnail, dataGridViewTextBox_normal });
-            dataGridView_photos.Location = new Point(740, 295);
+            dataGridView_photos.Location = new Point(740, 374);
             dataGridView_photos.Name = "dataGridView_photos";
             dataGridView_photos.ScrollBars = ScrollBars.Vertical;
             dataGridView_photos.Size = new Size(653, 105);
@@ -650,12 +654,45 @@
             dataGridViewTextBox_normal.Name = "dataGridViewTextBox_normal";
             dataGridViewTextBox_normal.Width = 305;
             // 
+            // label_openingHours
+            // 
+            label_openingHours.AutoSize = true;
+            label_openingHours.Font = new Font("Segoe UI", 13F);
+            label_openingHours.Location = new Point(740, 74);
+            label_openingHours.Name = "label_openingHours";
+            label_openingHours.Size = new Size(130, 25);
+            label_openingHours.TabIndex = 66;
+            label_openingHours.Text = "Otevirací Doba";
+            // 
+            // label_openingHoursException
+            // 
+            label_openingHoursException.AutoSize = true;
+            label_openingHoursException.Font = new Font("Segoe UI", 13F);
+            label_openingHoursException.Location = new Point(740, 210);
+            label_openingHoursException.Name = "label_openingHoursException";
+            label_openingHoursException.Size = new Size(189, 25);
+            label_openingHoursException.TabIndex = 67;
+            label_openingHoursException.Text = "Výjmečné zavírací časy";
+            // 
+            // label_photos
+            // 
+            label_photos.AutoSize = true;
+            label_photos.Font = new Font("Segoe UI", 13F);
+            label_photos.Location = new Point(740, 346);
+            label_photos.Name = "label_photos";
+            label_photos.Size = new Size(100, 25);
+            label_photos.TabIndex = 68;
+            label_photos.Text = "Photo links";
+            // 
             // DetailsForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             AutoScroll = true;
             ClientSize = new Size(1405, 950);
+            Controls.Add(label_photos);
+            Controls.Add(label_openingHoursException);
+            Controls.Add(label_openingHours);
             Controls.Add(dataGridView_photos);
             Controls.Add(richTextBox_tableLong);
             Controls.Add(label_tableLong);
@@ -788,5 +825,8 @@
         private DataGridView dataGridView_photos;
         private DataGridViewTextBoxColumn dataGridViewTextBox_thumbnail;
         private DataGridViewTextBoxColumn dataGridViewTextBox_normal;
+        private Label label_openingHours;
+        private Label label_openingHoursException;
+        private Label label_photos;
     }
 }

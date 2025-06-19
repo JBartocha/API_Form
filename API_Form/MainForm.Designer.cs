@@ -31,6 +31,7 @@
             button_Exit = new Button();
             button_Erase_DB_and_load_API_data_to_DB = new Button();
             button_Search_Zasilkovna = new Button();
+            button_sync_Data = new Button();
             SuspendLayout();
             // 
             // button_Exit
@@ -55,7 +56,7 @@
             // 
             // button_Search_Zasilkovna
             // 
-            button_Search_Zasilkovna.Location = new Point(305, 55);
+            button_Search_Zasilkovna.Location = new Point(305, 98);
             button_Search_Zasilkovna.Name = "button_Search_Zasilkovna";
             button_Search_Zasilkovna.Size = new Size(174, 37);
             button_Search_Zasilkovna.TabIndex = 2;
@@ -63,11 +64,22 @@
             button_Search_Zasilkovna.UseVisualStyleBackColor = true;
             button_Search_Zasilkovna.Click += button_Search_Zasilkovna_Click;
             // 
+            // button_sync_Data
+            // 
+            button_sync_Data.Location = new Point(305, 55);
+            button_sync_Data.Name = "button_sync_Data";
+            button_sync_Data.Size = new Size(174, 37);
+            button_sync_Data.TabIndex = 3;
+            button_sync_Data.Text = "Aktualizuj Data Zasilkovna";
+            button_sync_Data.UseVisualStyleBackColor = true;
+            button_sync_Data.Click += button_sync_Data_Click;
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(button_sync_Data);
             Controls.Add(button_Search_Zasilkovna);
             Controls.Add(button_Erase_DB_and_load_API_data_to_DB);
             Controls.Add(button_Exit);
@@ -81,5 +93,6 @@
         private Button button_Exit;
         private Button button_Erase_DB_and_load_API_data_to_DB;
         private Button button_Search_Zasilkovna;
+        private Button button_sync_Data;
     }
 }
