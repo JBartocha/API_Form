@@ -94,6 +94,39 @@ namespace API_Form
             return exceptions;
         }
 
+        public static int? GetPickupPoint_ID_from_PP_ID(int PP_ID)
+        {
+            string query = @"SELECT PickupPoint_ID FROM PickupPoint WHERE PP_ID = @PP_ID";
+
+            using var connection = new SqlConnection(_connectionString);
+            connection.Open();
+            using var command = new SqlCommand(query, connection);
+
+            command.Parameters.AddWithValue("@PP_ID", PP_ID);
+
+            object result = command.ExecuteScalar();
+            if (result != null && result != DBNull.Value)
+            {
+                return Convert.ToInt32(result);
+            }
+            return null;
+        }
+
+        public static int? GetOHE_OHGROUP_ID_from_openingHoursException(int PickupPoint_ID)
+        {
+            string query = @"SELECT OHE_OHGROUP_ID FROM OpeningHoursExceptions WHERE OHE_OHGROUP_ID = @PickupPoint_ID";
+            using var connection = new SqlConnection(_connectionString);
+            connection.Open();
+            using var command = new SqlCommand(query, connection);
+            command.Parameters.AddWithValue("@PickupPoint_ID", PickupPoint_ID);
+            object result = command.ExecuteScalar();
+            if (result != null && result != DBNull.Value)
+            {
+                return Convert.ToInt32(result);
+            }
+            return null;
+        }
+
         public static List<PickupPoint> SearchByColumn(string columnName, string value, Type valueType)
         {
             List<PickupPoint> pickupPoints = new List<PickupPoint>();

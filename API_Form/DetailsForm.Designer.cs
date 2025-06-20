@@ -94,6 +94,7 @@
             label_openingHours = new Label();
             label_openingHoursException = new Label();
             label_photos = new Label();
+            label_pom_pickupPoint_ID = new Label();
             ((System.ComponentModel.ISupportInitialize)dataGridView_openingHoursExceptions).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dataGridView_openingHours).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dataGridView_photos).BeginInit();
@@ -684,12 +685,22 @@
             label_photos.TabIndex = 68;
             label_photos.Text = "Photo links";
             // 
+            // label_pom_pickupPoint_ID
+            // 
+            label_pom_pickupPoint_ID.AutoSize = true;
+            label_pom_pickupPoint_ID.Location = new Point(1281, 9);
+            label_pom_pickupPoint_ID.Name = "label_pom_pickupPoint_ID";
+            label_pom_pickupPoint_ID.Size = new Size(87, 15);
+            label_pom_pickupPoint_ID.TabIndex = 69;
+            label_pom_pickupPoint_ID.Text = "pickupPoint_ID";
+            // 
             // DetailsForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             AutoScroll = true;
             ClientSize = new Size(1405, 950);
+            Controls.Add(label_pom_pickupPoint_ID);
             Controls.Add(label_photos);
             Controls.Add(label_openingHoursException);
             Controls.Add(label_openingHours);
@@ -828,5 +839,6 @@
         private Label label_openingHours;
         private Label label_openingHoursException;
         private Label label_photos;
+        private Label label_pom_pickupPoint_ID;
     }
 }

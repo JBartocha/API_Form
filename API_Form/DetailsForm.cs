@@ -1,4 +1,5 @@
 ﻿using ApiStoreTest;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.Web.WebView2.WinForms;
 using System;
 using System.Collections.Generic;
@@ -7,6 +8,7 @@ using System.Data;
 using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -16,19 +18,17 @@ namespace API_Form
     public partial class DetailsForm : Form
     {
         private readonly PickupPoint _pickupPointOriginal;
+        private readonly int _pickupPoint_ID;
         private RegularHours regularHoursChanged = new();
-
-        public DetailsForm()
-        {
-            InitializeComponent();
-            _pickupPointOriginal = new PickupPoint();
-        }
 
         public DetailsForm(PickupPoint pickupPoint)
         {
             InitializeComponent();
 
             _pickupPointOriginal = pickupPoint ?? throw new ArgumentNullException(nameof(pickupPoint), "PickupPoint cannot be null.");
+            _pickupPoint_ID = Database_Search_Operations.GetPickupPoint_ID_from_PP_ID(_pickupPointOriginal.Id)
+                ?? throw new InvalidOperationException("PickupPoint_ID not found in database.");
+            label_pom_pickupPoint_ID.Text = _pickupPoint_ID.ToString();
 
             fillComponentsWithData(_pickupPointOriginal);
         }
@@ -265,24 +265,24 @@ namespace API_Form
                     Exception = exceptionDays
                 }
             };
-            
+
             Func<ExceptionDay, DateOnly> keySelector = e => e.Date;
 
             // Added: In Current but not in Original
-            var added = current.OpeningHours.Exceptions.Exception
+            var exceptionAdded = current.OpeningHours.Exceptions.Exception
                 .Where(c => !_pickupPointOriginal.OpeningHours.Exceptions.Exception.Any(o => keySelector(o) == keySelector(c)))
                 .ToList();
 
             // Removed: In Original but not in Current
-            var removed = _pickupPointOriginal.OpeningHours.Exceptions.Exception
+            var exceptionRemoved = _pickupPointOriginal.OpeningHours.Exceptions.Exception
                 .Where(o => !current.OpeningHours.Exceptions.Exception.Any(c => keySelector(c) == keySelector(o)))
                 .ToList();
 
             // Changed: In both, but with different Hours (or other properties)
-            var changed = current.OpeningHours.Exceptions.Exception
+            var exceptionChanged = current.OpeningHours.Exceptions.Exception
                 .Where(c => _pickupPointOriginal.OpeningHours.Exceptions.Exception.Any(o => keySelector(o) == keySelector(c) && o.Hours != c.Hours))
                 .ToList();
-            Debug.WriteLine("Added: " + added.Count + ", Removed: " + removed.Count + ", Changed: " + changed.Count);
+            Debug.WriteLine("Added: " + exceptionAdded.Count + ", Removed: " + exceptionRemoved.Count + ", Changed: " + exceptionChanged.Count);
 
 
 
@@ -304,6 +304,28 @@ namespace API_Form
             var photosChanged = current.Photos
                 .Where(c => _pickupPointOriginal.Photos.Any(o => photoKeySelector(o) == photoKeySelector(c) && o.Normal != c.Normal))
                 .ToList();
+
+            int PickupPoint_ID = Database_Search_Operations.GetPickupPoint_ID_from_PP_ID(_pickupPointOriginal.Id)
+                ?? throw new InvalidOperationException("PickupPoint_ID not found in database.");
+            int OHE_OHGROUP_ID = Database_Search_Operations.GetOHE_OHGROUP_ID_from_openingHoursException(PickupPoint_ID)
+                ?? throw new InvalidOperationException("OHE_OHGROUP_ID not found in database.");
+
+            Database_Update_Operations.UpdatePickupPoint(PickupPoint_ID, current);
+
+            if(exceptionAdded.Count > 0)
+                Database_Update_Operations.AddopeningHoursExceptions(PickupPoint_ID, exceptionAdded);
+            if (exceptionRemoved.Count > 0)
+                Database_Update_Operations.DeleteopeningHoursExceptions(PickupPoint_ID, exceptionRemoved);
+            if (exceptionChanged.Count > 0)
+                Database_Update_Operations.UpdateopeningHoursExceptions(PickupPoint_ID, exceptionChanged);
+
+            if (photosAdded.Count > 0)
+                Database_Update_Operations.AddPhotosByGroupIds(OHE_OHGROUP_ID, photosAdded);
+            if (photosRemoved.Count > 0)
+                Database_Update_Operations.DeletePhotosByGroupIds(OHE_OHGROUP_ID, photosRemoved);
+            if (photosChanged.Count > 0)
+                Database_Update_Operations.UpdatePhotosByGroupIds(OHE_OHGROUP_ID, photosChanged);
+
 
             Debug.WriteLine("Photos Added: " + photosAdded.Count + ", Removed: " + photosRemoved.Count + ", Changed: " + photosChanged.Count);
         }

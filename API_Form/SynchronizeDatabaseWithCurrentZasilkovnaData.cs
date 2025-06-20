@@ -16,7 +16,6 @@ namespace API_Form
         static SynchronizeDatabaseWithCurrentZasilkovnaData()
         {
             _connectionString = ConnectionString.Get();
-            DeleteAllRowsAndResetIdentities();
         }
 
         public static void DeleteAllRowsAndResetIdentities()
@@ -37,9 +36,9 @@ namespace API_Form
 
                         // Delete data from all tables
                         using (var cmd = new SqlCommand(@"
-                            DELETE FROM [Photo];
-                            DELETE FROM [OpeningHoursExceptions];
-                            DELETE FROM [OpeningHours];
+                            DELETE FROM [photos];
+                            DELETE FROM [openingHoursExceptions];
+                            DELETE FROM [openingHours];
                             DELETE FROM [PickupPoint];
                         ", connection, transaction))
                         {
@@ -48,9 +47,9 @@ namespace API_Form
 
                         // Reset identity columns
                         using (var cmd = new SqlCommand(@"
-                            DBCC CHECKIDENT ('Photo', RESEED, 0);
-                            DBCC CHECKIDENT ('OpeningHoursExceptions', RESEED, 0);
-                            DBCC CHECKIDENT ('OpeningHours', RESEED, 0);
+                            DBCC CHECKIDENT ('photos', RESEED, 0);
+                            DBCC CHECKIDENT ('openingHoursExceptions', RESEED, 0);
+                            DBCC CHECKIDENT ('openingHours', RESEED, 0);
                             DBCC CHECKIDENT ('PickupPoint', RESEED, 0);
                         ", connection, transaction))
                         {

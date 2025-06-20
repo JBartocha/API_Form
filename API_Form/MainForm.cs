@@ -64,6 +64,7 @@ namespace API_Form
         private async void LoadAPIString(string APIUrl)
         {
             string jsonString = await GetJsonFromUrlAsync(APIUrl);
+            File.WriteAllText(_JsonFileName, jsonString);
             //Debug.WriteLine(jsonString);
         }
 
@@ -100,6 +101,7 @@ namespace API_Form
             _zasilkovnaRoots = GetZasilkovnaData();
             SynchronizeDatabaseWithCurrentZasilkovnaData.DeleteAllRowsAndResetIdentities();
             Database_FillWithAPI_Data.FillDatabaseWithZasilkovnaData(_zasilkovnaRoots);
+            MessageBox.Show("Synchronization with current data from site finished Succesfully.");
         }
     }
 }

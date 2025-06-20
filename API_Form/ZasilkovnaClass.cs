@@ -19,6 +19,7 @@ namespace ApiStoreTest
 
     public class PickupPoint
     {
+        [System.Text.Json.Serialization.JsonConverter(typeof(StringToIntConverter))]
         public int Id { get; set; }
         public string Name { get; set; } = string.Empty; // Fix: Initialize with a default value
         public string NameStreet { get; set; } = string.Empty; // Fix: Initialize with a default value
@@ -33,12 +34,18 @@ namespace ApiStoreTest
         public string? DirectionsCar { get; set; }
         public string? DirectionsPublic { get; set; }
         public string WheelchairAccessible { get; set; } = string.Empty; // Fix: Initialize with a default value
+        [System.Text.Json.Serialization.JsonConverter(typeof(StringToDoubleConverter))]
         public double Latitude { get; set; }
+        [System.Text.Json.Serialization.JsonConverter(typeof(StringToDoubleConverter))]
         public double Longitude { get; set; }
         public string Url { get; set; } = string.Empty; // Fix: Initialize with a default value
+        [System.Text.Json.Serialization.JsonConverter(typeof(StringToBoolConverter))]
         public bool DressingRoom { get; set; }
+        [System.Text.Json.Serialization.JsonConverter(typeof(StringToBoolConverter))]
         public bool ClaimAssistant { get; set; }
+        [System.Text.Json.Serialization.JsonConverter(typeof(StringToBoolConverter))]
         public bool PacketConsignment { get; set; }
+        [System.Text.Json.Serialization.JsonConverter(typeof(StringToIntConverter))]
         public int MaxWeight { get; set; }
         public string LabelRouting { get; set; } = string.Empty; // Fix: Initialize with a default value
         public string LabelName { get; set; } = string.Empty; // Fix: Initialize with a default value
@@ -76,7 +83,7 @@ namespace ApiStoreTest
 
     public class Exceptions
     {
-        public List<ExceptionDay> Exception { get; set; }
+        public List<ExceptionDay> Exception { get; set; } = new List<ExceptionDay>(); // Fix: Initialize with a default value
     }
 
     public class ExceptionDay
