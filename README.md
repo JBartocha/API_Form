@@ -21,7 +21,7 @@ Umožňuje upravit libovolná pole (nebo přidat pole pro linky na fotky a doby 
 "Zobraz na mapě" ukáže pozici na mapě z řetězce latitude a longitude componenty. Umožnuje zobrazení v google mapách v prohlížeči nebo pomocí rozšíření Leaflet přímo v programu(javascript).
 
 ## DB diagram:
-![MainDB](images/db_diagram.jpeg)
+![MainDB](images/db_diagram.jpg)
 
 //TODO - doplnit
 

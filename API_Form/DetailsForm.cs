@@ -173,7 +173,6 @@ namespace API_Form
         }
 
 
-
         private void button_zpet_Click(object sender, EventArgs e)
         {
             this.Close();
@@ -266,6 +265,47 @@ namespace API_Form
                     Exception = exceptionDays
                 }
             };
+            
+            Func<ExceptionDay, DateOnly> keySelector = e => e.Date;
+
+            // Added: In Current but not in Original
+            var added = current.OpeningHours.Exceptions.Exception
+                .Where(c => !_pickupPointOriginal.OpeningHours.Exceptions.Exception.Any(o => keySelector(o) == keySelector(c)))
+                .ToList();
+
+            // Removed: In Original but not in Current
+            var removed = _pickupPointOriginal.OpeningHours.Exceptions.Exception
+                .Where(o => !current.OpeningHours.Exceptions.Exception.Any(c => keySelector(c) == keySelector(o)))
+                .ToList();
+
+            // Changed: In both, but with different Hours (or other properties)
+            var changed = current.OpeningHours.Exceptions.Exception
+                .Where(c => _pickupPointOriginal.OpeningHours.Exceptions.Exception.Any(o => keySelector(o) == keySelector(c) && o.Hours != c.Hours))
+                .ToList();
+            Debug.WriteLine("Added: " + added.Count + ", Removed: " + removed.Count + ", Changed: " + changed.Count);
+
+
+
+
+            // Define a key selector for Photo (adjust if you have a better unique key)
+            Func<Photo, string> photoKeySelector = p => p.Thumbnail ?? "";
+
+            // Added: In Current but not in Original
+            var photosAdded = current.Photos
+                .Where(c => !_pickupPointOriginal.Photos.Any(o => photoKeySelector(o) == photoKeySelector(c)))
+                .ToList();
+
+            // Removed: In Original but not in Current
+            var photosRemoved = _pickupPointOriginal.Photos
+                .Where(o => !current.Photos.Any(c => photoKeySelector(c) == photoKeySelector(o)))
+                .ToList();
+
+            // Changed: In both, but with different Normal (or other properties)
+            var photosChanged = current.Photos
+                .Where(c => _pickupPointOriginal.Photos.Any(o => photoKeySelector(o) == photoKeySelector(c) && o.Normal != c.Normal))
+                .ToList();
+
+            Debug.WriteLine("Photos Added: " + photosAdded.Count + ", Removed: " + photosRemoved.Count + ", Changed: " + photosChanged.Count);
         }
 
         private void button_Show_On_Map_Click(object sender, EventArgs e)
