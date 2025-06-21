@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
             button_Exit = new Button();
-            button_Erase_DB_and_load_API_data_to_DB = new Button();
             button_Search_Zasilkovna = new Button();
             button_sync_Data = new Button();
             SuspendLayout();
@@ -44,19 +43,9 @@
             button_Exit.UseVisualStyleBackColor = true;
             button_Exit.Click += button_Exit_Click;
             // 
-            // button_Erase_DB_and_load_API_data_to_DB
-            // 
-            button_Erase_DB_and_load_API_data_to_DB.Location = new Point(305, 12);
-            button_Erase_DB_and_load_API_data_to_DB.Name = "button_Erase_DB_and_load_API_data_to_DB";
-            button_Erase_DB_and_load_API_data_to_DB.Size = new Size(174, 37);
-            button_Erase_DB_and_load_API_data_to_DB.TabIndex = 1;
-            button_Erase_DB_and_load_API_data_to_DB.Text = "Nacti API do DB";
-            button_Erase_DB_and_load_API_data_to_DB.UseVisualStyleBackColor = true;
-            button_Erase_DB_and_load_API_data_to_DB.Click += button_Erase_DB_and_load_API_data_to_DB_Click;
-            // 
             // button_Search_Zasilkovna
             // 
-            button_Search_Zasilkovna.Location = new Point(305, 98);
+            button_Search_Zasilkovna.Location = new Point(305, 55);
             button_Search_Zasilkovna.Name = "button_Search_Zasilkovna";
             button_Search_Zasilkovna.Size = new Size(174, 37);
             button_Search_Zasilkovna.TabIndex = 2;
@@ -66,7 +55,7 @@
             // 
             // button_sync_Data
             // 
-            button_sync_Data.Location = new Point(305, 55);
+            button_sync_Data.Location = new Point(305, 12);
             button_sync_Data.Name = "button_sync_Data";
             button_sync_Data.Size = new Size(174, 37);
             button_sync_Data.TabIndex = 3;
@@ -81,7 +70,6 @@
             ClientSize = new Size(800, 450);
             Controls.Add(button_sync_Data);
             Controls.Add(button_Search_Zasilkovna);
-            Controls.Add(button_Erase_DB_and_load_API_data_to_DB);
             Controls.Add(button_Exit);
             Name = "MainForm";
             Text = "MainForm";
@@ -91,7 +79,6 @@
         #endregion
 
         private Button button_Exit;
-        private Button button_Erase_DB_and_load_API_data_to_DB;
         private Button button_Search_Zasilkovna;
         private Button button_sync_Data;
     }

@@ -73,17 +73,6 @@ namespace API_Form
             Application.Exit(); // Close the application
         }
 
-        private void button_Erase_DB_and_load_API_data_to_DB_Click(object sender, EventArgs e)
-        {
-            this.Hide(); //TODO - co s tímto?
-
-            ZasilkovnaJsonModel _zasilkovnaRoots = new ZasilkovnaJsonModel();
-            LoadAPIString(ApiUrl);
-            _zasilkovnaRoots = GetZasilkovnaData();
-
-            Database_FillWithAPI_Data.FillDatabaseWithZasilkovnaData(_zasilkovnaRoots);
-        }
-
         private void button_Search_Zasilkovna_Click(object sender, EventArgs e)
         {
             this.Hide();
